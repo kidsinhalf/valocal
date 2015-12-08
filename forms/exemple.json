@@ -1,0 +1,19 @@
+[
+{"action":{"table":"hebergements", "mode":"session", "id":"id_adherent"}},
+{"html":{"content":"<fieldset><legend>Légende</legend>"}},
+{"hidden":{"default":"caché"}},
+{"text":{"label":"Qui êtes-vous ?", "name":"titre", "commentaires":"présentez-vous en deux mots", "verify":"empty"}},
+{"text":{"label":"Votre email", "verify":"email", "default":"xyz@email.com"}},
+{"text":{"label":"De quelle volonté votre initiative est-elle partie ?"}},
+{"text":{"label":"Quelles est votre philosophie ? Quelles sont les valeurs que vous défendez ?"}},
+{"text":{"label":"Comment se traduit votre engagement responsable (environnement, social, économie) ?","class":"longsize red"}},
+{"text":{"label":"A qui s adresse votre initiative ?","verify":"empty"}},
+{"text":{"label":"Où pouvons-nous vous trouver ? Comment pouvons-nous vous joindre ?"}},
+{"textarea":{"label":"Commentaire"}},
+{"radio":{"label":"Option", "valeurs": {"oui":"oui", "non":"non"}}},
+{"radio":{"label":"Option", "valeurs": {"daccord":"oui", "déjà coché":"non"}, "default":"non"}},
+{"select":{"label":"Vous êtes", "valeurs": {"un homme":"homme", "une femme":"femme"}}},
+{"select":{"label":"Département", "valeurs_from": "SELECT id,titre FROM geographie_regions"}},
+{"checkbox":{"label":"Hobbies", "valeurs": {"éléphant":"elephant", "lièvre de garenne":"lievre"}}},
+{"html":{"content":"</fieldset>"}}
+]
