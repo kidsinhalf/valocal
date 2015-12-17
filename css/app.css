@@ -1,1 +1,9 @@
-#logo-text a{color:red;}
+﻿.top-bar .name #logonav a{width: auto; }
+
+/*Vive Flex !*/
+.flex_parent{
+display:flex;
+flex-direction: row;
+flex-wrap: wrap; /*nowrap | wrap | wrap-reverse;*/
+}
+.flex_child{}

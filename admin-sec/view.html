@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="fr" prefix="og: http://ogp.me/ns#"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="fr" prefix="og: http://ogp.me/ns#"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="fr" prefix="og: http://ogp.me/ns#"> <![endif]-->
+<!--[if gt IE 7]> <html class="no-js ie oldie" lang="fr" prefix="og: http://ogp.me/ns#"> <![endif]-->
+<html class="no-js" lang="fr" prefix="og: http://ogp.me/ns#"> <!--<![endif]-->
+  <head>
+    <meta charset="ISO-8859-1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Valocable Admin</title>
+	<!-- CSS Framework et personnalisé-->
+    <link rel="stylesheet" href="http://localhost/valocal/valocal/css/foundation.css" />
+	<link rel="stylesheet" href="http://localhost/valocal/valocal//css/app.css">
+	<script src="http://localhost/valocal/valocal//js/vendor/modernizr.js"></script>
+	
+	<script src="../js/vendor/jquery.js"></script>
+    <script src="../js/foundation.min.js"></script>
+	<!-- CSS Tables Datatable MIT-->
+	<link rel="stylesheet" type="text/css" href="http://localhost/valocal/valocal/js/datatables/media/css/dataTables.foundation.min.css">
+	<script type="text/javascript" charset="utf8" src="http://localhost/valocal/valocal/js/datatables/media/js/jquery.dataTables.min.js"></script>
+	
+	</head>
+<body>  
+    <div class="row">
+        <div class="large-12 columns">
+		? <nav class="top-bar" data-topbar>
+              <ul class="title-area">
+                 
+                <li class="name">
+                  <div id="logo-text">
+                    <a href="/">Valocal</a>
+                  </div>
+                </li>
+                <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
+              </ul>
+       
+              <section class="top-bar-section">
+                <ul class="left">
+                  <li><a href="#" title="en attente">Valocable</a></li>
+                  <li><a href="#" title="en attente">Valopneu</a></li>
+                </ul>
+       
+                <ul class="right">
+                  <li class="search">
+                    <form>
+                      <input type="search">
+                    </form>
+                  </li>
+       
+                  <li class="has-button">
+                    <a class="small button" href="#">chercher</a>
+                  </li>
+                </ul>
+              </section>
+</nav>  
+          </div>
+    </div>
+
+    <div class="row">
+        <div class="large-12 columns">
+			<h1>Accueil</h1>
+                   
+<!-- Code à modifier-->
+
+	
+	<div class="flex_parent">
+	<form method="get">
+	<fieldset>
+	<legend>Filtres</legend>
+		<div class="flexed">filtre 1 : <select name="segment1"><option></option><option value="id">id</option><option value="nom">nom</option><option value="prenom">prenom</option><option value="categorie">categorie</option><option value="email">email</option><option value="telephone">telephone</option><option value="adresse">adresse</option><option value="cp">cp</option></select> <input type="text" name="filtre1" value="" /></div>
+		<div class="flexed">filtre 2 : <select name="segment2"><option></option><option value="id">id</option><option value="nom">nom</option><option value="prenom">prenom</option><option value="categorie">categorie</option><option value="email">email</option><option value="telephone">telephone</option><option value="adresse">adresse</option><option value="cp">cp</option></select> <input type="text" name="filtre2" value="" /></div>
+		<div><input type="submit" value="segment" /><input type="hidden" name="table" value="clients"></div>
+	</fieldset>
+	</form>
+	
+	</div>
+	
+	
+	<form name="main_form" method="post">
+	<table id="tabmain">
+	<caption>4 éléments trouvés</caption>
+<thead>
+<tr><th>action</th><th>id</th><th>nom</th><th>prenom</th><th>categorie</th><th>email</th><th>telephone</th><th>adresse</th><th>cp</th></tr>
+</thead>
+<tbody>
+<tr id="ancre_6"><td>
+			<input type="checkbox" name="id_actif[]" value="6" />
+			<a href="edit-table.php?table=clients&action=modifier&id=6"><img src="css/items/edit-blue.gif" /></a><a onclick="return confirm('êtes-vous sûr de vouloir supprimer ?');" href="view-table.php?action=supprimer&table=clients&id=6"><img src="css/items/delete-page-red.gif" /></a>
+		</td><td>6</td><td>Rabourdin</td><td>Baptiste</td><td></td><td></td><td></td><td></td><td></td></tr><tr id="ancre_5"><td>
+			<input type="checkbox" name="id_actif[]" value="5" />
+			<a href="edit-table.php?table=clients&action=modifier&id=5"><img src="css/items/edit-blue.gif" /></a><a onclick="return confirm('êtes-vous sûr de vouloir supprimer ?');" href="view-table.php?action=supprimer&table=clients&id=5"><img src="css/items/delete-page-red.gif" /></a>
+		</td><td>5</td><td>Rabourdin</td><td>Baptiste</td><td></td><td></td><td></td><td></td><td></td></tr><tr id="ancre_4"><td>
+			<input type="checkbox" name="id_actif[]" value="4" />
+			<a href="edit-table.php?table=clients&action=modifier&id=4"><img src="css/items/edit-blue.gif" /></a><a onclick="return confirm('êtes-vous sûr de vouloir supprimer ?');" href="view-table.php?action=supprimer&table=clients&id=4"><img src="css/items/delete-page-red.gif" /></a>
+		</td><td>4</td><td>Rabourdin</td><td>Baptiste</td><td></td><td></td><td></td><td></td><td></td></tr><tr id="ancre_1"><td>
+			<input type="checkbox" name="id_actif[]" value="1" />
+			<a href="edit-table.php?table=clients&action=modifier&id=1"><img src="css/items/edit-blue.gif" /></a><a onclick="return confirm('êtes-vous sûr de vouloir supprimer ?');" href="view-table.php?action=supprimer&table=clients&id=1"><img src="css/items/delete-page-red.gif" /></a>
+		</td><td>1</td><td>Rabourdin1</td><td>Baptiste1</td><td></td><td></td><td></td><td></td><td></td></tr>
+</tbody></table>
+
+<script>
+$(document).ready( function () {
+    $('#tabmain').DataTable({
+		select: true,
+		scrollY: 300,
+		paging: false
+		});
+} );
+</script>
+<input type="button" name="CheckAll" value="Tous" onClick="checkall_uncheckall('id_actif',1)">
+<input type="button" name="UnCheckAll" value="Aucun" onClick="checkall_uncheckall('id_actif',0)">
+<select name="type_action">
+	<option>---</option>
+	<option value="supprimer">supprimer</option>
+	<option value="valider">valider</option>
+	<option value="invalider">invalider</option>
+</select>
+<input type="submit" name="action" value="action sur ids" /></form>
+
+ 
+            </div>
+          </div>
+?<footer class="row">
+          <div class="large-12 columns">
+            <hr>
+            <div class="row">
+              <div class="large-6 columns">
+                <p>© Copyright eco-SAPIENS.</p>
+              </div>
+              <div class="large-6 columns">
+                <ul class="inline-list right">
+                  <li><a href="/valocal/webslim/contact/">Contact</a></li>
+                  <li><a href="#">Link 2</a></li>
+                  <li><a href="#">Link 3</a></li>
+                  <li><a href="#">Link 4</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </footer>
+		
+
+    <script>
+      $(document).foundation();
+    </script>
+</body>
+</html>	?<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="fr" prefix="og: http://ogp.me/ns#"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="fr" prefix="og: http://ogp.me/ns#"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="fr" prefix="og: http://ogp.me/ns#"> <![endif]-->
+<!--[if gt IE 7]> <html class="no-js ie oldie" lang="fr" prefix="og: http://ogp.me/ns#"> <![endif]-->
+<html class="no-js" lang="fr" prefix="og: http://ogp.me/ns#"> <!--<![endif]-->
+  <head>
+    <meta charset="ISO-8859-1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Valocable Admin</title>
+	<!-- CSS Framework et personnalisé-->
+    <link rel="stylesheet" href="http://localhost/valocal/valocal/css/foundation.css" />
+	<link rel="stylesheet" href="http://localhost/valocal/valocal//css/app.css">
+	<script src="http://localhost/valocal/valocal//js/vendor/modernizr.js"></script>
+	
+	<script src="../js/vendor/jquery.js"></script>
+    <script src="../js/foundation.min.js"></script>
+	<!-- CSS Tables Datatable MIT-->
+	<link rel="stylesheet" type="text/css" href="http://localhost/valocal/valocal/js/datatables/media/css/dataTables.foundation.min.css">
+	<script type="text/javascript" charset="utf8" src="http://localhost/valocal/valocal/js/datatables/media/js/jquery.dataTables.min.js"></script>
+	
+	</head>
+<body>  
+    <div class="row">
+        <div class="large-12 columns">
+		? <nav class="top-bar" data-topbar>
+              <ul class="title-area">
+                 
+                <li class="name">
+                  <div id="logo-text">
+                    <a href="/">Valocal</a>
+                  </div>
+                </li>
+                <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
+              </ul>
+       
+              <section class="top-bar-section">
+                <ul class="left">
+                  <li><a href="#" title="en attente">Valocable</a></li>
+                  <li><a href="#" title="en attente">Valopneu</a></li>
+                </ul>
+       
+                <ul class="right">
+                  <li class="search">
+                    <form>
+                      <input type="search">
+                    </form>
+                  </li>
+       
+                  <li class="has-button">
+                    <a class="small button" href="#">chercher</a>
+                  </li>
+                </ul>
+              </section>
+</nav>  
+          </div>
+    </div>
+
+    <div class="row">
+        <div class="large-12 columns">
+			<h1>Accueil</h1>
+                   
+<!-- Code à modifier-->
+
+	
+	<div class="flex_parent">
+	<form method="get">
+	<fieldset>
+	<legend>Filtres</legend>
+		<div class="flexed">filtre 1 : <select name="segment1"><option></option><option value="id">id</option><option value="nom">nom</option><option value="prenom">prenom</option><option value="categorie">categorie</option><option value="email">email</option><option value="telephone">telephone</option><option value="adresse">adresse</option><option value="cp">cp</option></select> <input type="text" name="filtre1" value="" /></div>
+		<div class="flexed">filtre 2 : <select name="segment2"><option></option><option value="id">id</option><option value="nom">nom</option><option value="prenom">prenom</option><option value="categorie">categorie</option><option value="email">email</option><option value="telephone">telephone</option><option value="adresse">adresse</option><option value="cp">cp</option></select> <input type="text" name="filtre2" value="" /></div>
+		<div><input type="submit" value="segment" /><input type="hidden" name="table" value="clients"></div>
+	</fieldset>
+	</form>
+	
+	</div>
+	
+	
+	<form name="main_form" method="post">
+	<table id="tabmain">
+	<caption>4 éléments trouvés</caption>
+<thead>
+<tr><th>action</th><th>id</th><th>nom</th><th>prenom</th><th>categorie</th><th>email</th><th>telephone</th><th>adresse</th><th>cp</th></tr>
+</thead>
+<tbody>
+<tr id="ancre_6"><td>
+			<input type="checkbox" name="id_actif[]" value="6" />
+			<a href="edit-table.php?table=clients&action=modifier&id=6"><img src="css/items/edit-blue.gif" /></a><a onclick="return confirm('êtes-vous sûr de vouloir supprimer ?');" href="view-table.php?action=supprimer&table=clients&id=6"><img src="css/items/delete-page-red.gif" /></a>
+		</td><td>6</td><td>Rabourdin</td><td>Baptiste</td><td></td><td></td><td></td><td></td><td></td></tr><tr id="ancre_5"><td>
+			<input type="checkbox" name="id_actif[]" value="5" />
+			<a href="edit-table.php?table=clients&action=modifier&id=5"><img src="css/items/edit-blue.gif" /></a><a onclick="return confirm('êtes-vous sûr de vouloir supprimer ?');" href="view-table.php?action=supprimer&table=clients&id=5"><img src="css/items/delete-page-red.gif" /></a>
+		</td><td>5</td><td>Rabourdin</td><td>Baptiste</td><td></td><td></td><td></td><td></td><td></td></tr><tr id="ancre_4"><td>
+			<input type="checkbox" name="id_actif[]" value="4" />
+			<a href="edit-table.php?table=clients&action=modifier&id=4"><img src="css/items/edit-blue.gif" /></a><a onclick="return confirm('êtes-vous sûr de vouloir supprimer ?');" href="view-table.php?action=supprimer&table=clients&id=4"><img src="css/items/delete-page-red.gif" /></a>
+		</td><td>4</td><td>Rabourdin</td><td>Baptiste</td><td></td><td></td><td></td><td></td><td></td></tr><tr id="ancre_1"><td>
+			<input type="checkbox" name="id_actif[]" value="1" />
+			<a href="edit-table.php?table=clients&action=modifier&id=1"><img src="css/items/edit-blue.gif" /></a><a onclick="return confirm('êtes-vous sûr de vouloir supprimer ?');" href="view-table.php?action=supprimer&table=clients&id=1"><img src="css/items/delete-page-red.gif" /></a>
+		</td><td>1</td><td>Rabourdin1</td><td>Baptiste1</td><td></td><td></td><td></td><td></td><td></td></tr>
+</tbody></table>
+
+<script>
+$(document).ready( function () {
+    $('#tabmain').DataTable({
+		select: true,
+		scrollY: 300,
+		paging: false
+		});
+} );
+</script>
+<input type="button" name="CheckAll" value="Tous" onClick="checkall_uncheckall('id_actif',1)">
+<input type="button" name="UnCheckAll" value="Aucun" onClick="checkall_uncheckall('id_actif',0)">
+<select name="type_action">
+	<option>---</option>
+	<option value="supprimer">supprimer</option>
+	<option value="valider">valider</option>
+	<option value="invalider">invalider</option>
+</select>
+<input type="submit" name="action" value="action sur ids" /></form>
+
+ 
+            </div>
+          </div>
+?<footer class="row">
+          <div class="large-12 columns">
+            <hr>
+            <div class="row">
+              <div class="large-6 columns">
+                <p>© Copyright eco-SAPIENS.</p>
+              </div>
+              <div class="large-6 columns">
+                <ul class="inline-list right">
+                  <li><a href="/valocal/webslim/contact/">Contact</a></li>
+                  <li><a href="#">Link 2</a></li>
+                  <li><a href="#">Link 3</a></li>
+                  <li><a href="#">Link 4</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </footer>
+		
+
+    <script>
+      $(document).foundation();
+    </script>
+</body>
+</html>

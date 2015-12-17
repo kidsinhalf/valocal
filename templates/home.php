@@ -1,4 +1,4 @@
-﻿<?php include 'blocs/header.php';?>  
+<?php include 'blocs/header.php';?>  
       <div class="row">
         <div class="large-12 columns">
 		<?php include 'blocs/nav-top.php';?>  

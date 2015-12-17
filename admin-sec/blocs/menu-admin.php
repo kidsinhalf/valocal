@@ -1,10 +1,8 @@
-﻿ <nav class="top-bar" data-topbar>
+ <nav class="top-bar" data-topbar>
               <ul class="title-area">
                  
                 <li class="name">
-                  <div id="logo-text">
-                    <a href="/">Valocal</a>
-                  </div>
+                    <div id="logonav"><a href="<?php echo $url_base;?>"><img src="../img/logo-nav.png" alt="Valocal" /></a></div>
                 </li>
                 <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
               </ul>

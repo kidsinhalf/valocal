@@ -1,7 +1,7 @@
-ï»¿<?php
+<?php
 session_start();
 include '../inc/baseconnect.php';
-include '../fonctions/general.php';
+include '../inc/fonctions.php';
 $tab_alerte=array();
 include 'inc/recuperation-get.php';
 if (!empty($_POST)) include 'inc/recuperation-post.php';
@@ -16,84 +16,45 @@ if (isset($_GET['segment1']) AND !empty($_GET['segment1'])) $url_filtres.='&segm
 if (isset($_GET['segment2']) AND !empty($_GET['segment2'])) $url_filtres.='&segment2='.$_GET['segment2'].'&filtre2='.$_GET['filtre2'];
 if (isset($_GET['page'])) $deb=($_GET['page']-1)*$nb_items_par_page; else $deb=0;
 
+$clause_where='';
+$tab_clause_where=array();
+
 $tab_champs_primaires=array();
-$reponse_champ=mysql_query("SHOW COLUMNS FROM $table");
-while ($donnees_champ=mysql_fetch_array($reponse_champ)){
-	//echo '<div>'.$donnees_champ[0].' '.$donnees_champ[1].' '.$donnees_champ[2].' '.$donnees_champ[3].'</div>';
-	if ($donnees_champ[1]!='text') $tab_champs_nom[]=$donnees_champ[0];
-	if ($donnees_champ[1]!='text') $tab_champs_type[]=$donnees_champ[1];
-	if ($donnees_champ[3]=='PRI') $tab_champs_primaires[]=$donnees_champ[0];
-	if (substr($donnees_champ[1],0,4)=='enum'){
-		$tab_enum[$donnees_champ[0]]=explode("','",substr($donnees_champ[1],6,-2));
+$donnees_champs=db_select('SHOW COLUMNS FROM '.$table);
+//var_dump($donnees_champs);
+
+foreach ($donnees_champs as $tab_champs){
+	if ($tab_champs['Type']!='text') $tab_champs_nom[]=$tab_champs['Field'];
+	if ($tab_champs['Type']!='text') $tab_champs_type[]=$tab_champs['Type'];
+	if ($tab_champs['Key']=='PRI') $tab_champs_primaires[]=$tab_champs['Field'];
+	if (substr($tab_champs['Type'],0,4)=='enum'){
+		$tab_enum[$tab_champs['Field']]=explode("','",substr($tab_champs['Type'],6,-2));
 		}
 }
 
 
 ?>
 <?php include 'blocs/header-admin.php';?>  
-      <div class="row">
+    <div class="row">
         <div class="large-12 columns">
 		<?php include 'blocs/menu-admin.php';?>  
           </div>
-        </div>
+    </div>
 
-        <div class="row">
-          <div class="large-12 columns">
-            <div class="row">
-
-              <div class="large-8 columns">
-                  <h1>Accueil</h1>
-                <?php if (!empty($tab_alerte)) foreach ($tab_alerte as $alerte) echo $alerte; //LE tableau d'alertes?>
+    <div class="row">
+        <div class="large-12 columns">
+			<h1>Accueil</h1>
+            <?php if (!empty($tab_alerte)) foreach ($tab_alerte as $alerte) echo $alerte; //Le tableau d'alertes?>
        
-              </div>
-			  
-			  
-              <div class="large-4 columns">
-				<h2>Col Droite</h2>
-			  </div>
-			  
-            </div>
-          </div>
-        </div>
-<?php include 'blocs/footer-admin.php';?>
-
-
-
-
-		<?php
-
-?>
-
+<!-- Code Ã  modifier-->
 <?php
-
-
-<?php
-	echo '<form method="get" name="form_clause">
-	<img src="css/items/sitemap-blue.gif" /> <strong>Filtres</strong> - ';
-	foreach ($tab_enum as $enum_nom=>$enum){
-		echo '.<strong>'.$enum_nom.'</strong> : <select name="'.$enum_nom.'">
-					<option></option>';
-					foreach ($enum as $enum_poss){
-					if (isset($_GET[$nom_enum]) AND $_GET[$nom_enum]==$enum_poss) $selected=' selected="selected"'; else $selected='';
-					echo '<option value="'.$enum_poss.'"'.$selected.'>'.$enum_poss.'</option>';
-					}
-					
-					echo '</select>';
-					}
-					echo '
-					<input type="hidden" name="table" value="'.$table.'">
-					<input type="button" value="clause" onclick="select_clause_submit(\'form_clause\')" />
-	</form>';
-				
-//fin enum
-}
-
+/*Preparation des filtres*/
+$html_form_select='';
 foreach ($tab_champs_nom as $champs_nom){
 	$html_form_select.='<option value="'.$champs_nom.'">'.$champs_nom.'</option>';
 	}
 
-		$clause_where='';
-		$tab_clause_where=array();
+		/*Exemples de filtre en LIKE ou = strict*/
 		if (isset($_GET['segment1']) AND !empty($_GET['segment1'])){
 			if ($_GET['segment1']=='id_formation') $tab_clause_where[]=' '.$_GET['segment1'].' = "'.$_GET['filtre1'].'"';
 			else $tab_clause_where[]=' '.$_GET['segment1'].' LIKE "%'.$_GET['filtre1'].'%"';
@@ -103,7 +64,7 @@ foreach ($tab_champs_nom as $champs_nom){
 			else $tab_clause_where[]=' '.$_GET['segment2'].' LIKE "%'.$_GET['filtre2'].'%"';
 			}
 		
-		
+		/*Exemple de filtre directement par nom du champ passÃ© en paramÃ¨tre GET (attention aux injections SQL)*/
 		$array_key_get=array_keys($_GET);
 		if (!in_array('id',$array_key_get)){
 		$array_clause=array_intersect($array_key_get,$tab_champs_nom);
@@ -114,13 +75,13 @@ foreach ($tab_champs_nom as $champs_nom){
 		
 		if (!empty($tab_clause_where)) $clause_where=' WHERE '.implode(' AND ',$tab_clause_where);
 		
-		
+$id_item=0;
 
+$query='SELECT COUNT(id) AS total FROM '.$table.$clause_where;
+$donnees_temp=db_select($query);
 
-$id_item=0;$i_couleur=0;
+$nb_items=$donnees_temp[0]['total'];
 
-$query='SELECT '.$tab_champs_nom[0].' FROM '.$table.$clause_where;
-$nb_items=mysql_num_rows(mysql_query($query));
 $nb_pages=floor($nb_items/$nb_items_par_page)+1;
 if ($nb_items>$nb_items_par_page){
 if (!isset($_GET['page'])) $page=1; else $page=$_GET['page'];
@@ -144,62 +105,69 @@ if (!isset($_GET['page'])) $page=1; else $page=$_GET['page'];
 	}
 	
 	?>
-	<div style="margin:6px auto; width:80%; font-size:11px; border:dotted 1px #aaaaaa;">
+
 	<?php
 	//filtres
 	echo '
+	
 	<form method="get">
-	<img src="css/items/sitemap-blue.gif" /> <strong>Filtres</strong> - 
-	<input type="hidden" name="table" value="'.$table.'">
-	filtre 1 : <select name="segment1"><option></option>'.$html_form_select.'</select> <input type="text" name="filtre1" value="" /> - 
-	filtre 2 : <select name="segment2"><option></option>'.$html_form_select.'</select> <input type="text" name="filtre2" value="" /> - 
-	<input type="submit" value="segment" />
-	</form>
+		<fieldset>
+			<legend>Filtres</legend>
+			<div class="flex_parent">
+				<div class="flexed flex_parent">
+					<div class="flexed"><label class="prefix">filtre 1</label></div><div class="flexed"> <select name="segment1"><option></option>'.$html_form_select.'</select></div><div class="flexed"><input type="text" name="filtre1" value="" /></div>
+				</div>
+				<div class="flexed flex_parent">
+					<div class="flexed"><label class="prefix">filtre 2</label></div><div class="flexed"><select name="segment2"><option></option>'.$html_form_select.'</select></div><div class="flexed"><input type="text" name="filtre2" value="" /></div>
+				</div>
+				<div class="flexed"><input type="submit" class="button tiny" value="segment" /><input type="hidden" name="table" value="'.$table.'"></div>
+			</div>
+			</fieldset>
+		</form>
 	';
 
 		//import fichier
-		if ($table=='base_email' OR $table=='inscriptions' OR $table=='recettes' OR $table=='emails_desinscriptions' OR $table=='emails_retourserreurs') echo '
-		<form method="POST" enctype="multipart/form-data">
-		<img src="css/items/upload-page-green.gif" /><strong> Importer</strong> un fichier csv : <input type="file" name="fichier_csv" />
-		<input type="submit" name="action" value="importer" />
-		</form>';
+		if ($table=='base_email' OR $table=='inscriptions' OR $table=='recettes' OR $table=='emails_desinscriptions' OR $table=='emails_retourserreurs'){
+			echo '
+				<form method="POST" enctype="multipart/form-data">
+				<img src="css/items/upload-page-green.gif" /><strong> Importer</strong> un fichier csv : <input type="file" name="fichier_csv" />
+				<input type="submit" name="action" value="importer" />
+				</form>';
+				}
+	
 	?>
-	</div>
+
 	
 	
 	<form name="main_form" method="post">
+	<table id="tabmain">
 	<?php
-
-//LA TABLE !
-echo '<table id="tabmain" class="data sortable">';
-echo '<caption>'.$nb_items.' éléments trouvés</caption>';
-echo '<tr>';
+echo '<caption>'.$nb_items.' Ã©lÃ©ments trouvÃ©s</caption>';
+echo '
+<thead>
+<tr>';
 echo '<th>action</th>';
 foreach ($tab_champs_nom as $champ_nom) echo '<th>'.$champ_nom.'</th>';
-echo '</tr>';
+echo '</tr>
+</thead>
+<tbody>
+';
 
-$order='ORDER BY '.$tab_champs_nom[0].' DESC';
-	
+
+$order='ORDER BY '.$tab_champs_nom[0].' DESC';	
 $query='SELECT '.implode(',',$tab_champs_nom).' FROM '.$table.$clause_where.' '.$order.' LIMIT '.$deb.', '.$nb_items_par_page;
 //echo $query;
-$reponse=mysql_query($query);
-while ($donnees=mysql_fetch_array($reponse)){
+$donnees_all=db_select($query);
+foreach ($donnees_all as $donnees){
 $id_item++;
-//les goutes te les couleurs
-		switch ($i_couleur){
-		case 0: $tr_couleur='#FBF2B7';$i_couleur=1;
-		break;
-		case 1: $tr_couleur='#ffffff';$i_couleur=0;
-		break;
-		}
 		
 	if (isset($_POST['id']) AND $_POST['id']==$donnees['id']) $tr_couleur='#aa66aa';
 	if (isset($donnees['statut']) AND $donnees['statut']=='liste attente') $tr_couleur='#e0d5e3';
-	if (isset($donnees['statut']) AND $donnees['statut']=='annulé') $tr_couleur='#f1e4e1';
+	if (isset($donnees['statut']) AND $donnees['statut']=='annulÃ©') $tr_couleur='#f1e4e1';
 	if (isset($donnees['statut']) AND $donnees['statut']=='absent') $tr_couleur='#c8eac8';
 	if (isset($donnees['statut']) AND $donnees['statut']=='poubelle') $tr_couleur='#e5e6c0';
 	
-	echo '<tr style="background-color:'.$tr_couleur.'" id="ancre_'.$donnees['id'].'">';
+	echo '<tr id="ancre_'.$donnees['id'].'">';
 	
 	//boutons d'action
 	$url_cles_primaires=array();
@@ -212,7 +180,7 @@ $id_item++;
 	echo '<td>
 			<input type="checkbox" name="id_actif[]" value="'.$donnees['id'].'" />
 			<a href="edit-table.php?table='.$table.'&action=modifier&'.implode('&',$url_cles_primaires).'"><img src="css/items/edit-blue.gif" /></a>';
-			if ($table!='inscriptions') echo '<a onclick="return confirm(\'Êtes-vous sûr de vouloir supprimer ?\');" href="view-table.php?action=supprimer&table='.$table.'&'.implode('&',$url_cles_primaires).'"><img src="css/items/delete-page-red.gif" /></a>
+			if ($table!='inscriptions') echo '<a onclick="return confirm(\'Ãªtes-vous sÃ»r de vouloir supprimer ?\');" href="view-table.php?action=supprimer&table='.$table.'&'.implode('&',$url_cles_primaires).'"><img src="css/items/delete-page-red.gif" /></a>
 		</td>';
 		
 	
@@ -228,7 +196,7 @@ $id_item++;
 			case 'url_site': echo '<td><a target="blank" href="http://'.str_replace('http://','',$donnees[$i_champ]).'">'.$donnees[$i_champ].'</a></td>';
 			break;
 			//qqs champs en particulier
-			default: echo '<td>'.$donnees[$i_champ].'</td>';
+			default: echo '<td>'.$donnees[$tab_champs_nom[$i_champ]].'</td>';
 			}
 		
 		}
@@ -238,8 +206,20 @@ $id_item++;
 			
 	echo '</tr>';
 	}
-echo '</table>';
-		?>
+echo '
+</tbody>';
+?>
+</table>
+
+<script>
+$(document).ready( function () {
+    $('#tabmain').DataTable({
+		select: true,
+		scrollY: 300,
+		paging: false
+		});
+} );
+</script>
 <input type="button" name="CheckAll" value="Tous" onClick="checkall_uncheckall('id_actif',1)">
 <input type="button" name="UnCheckAll" value="Aucun" onClick="checkall_uncheckall('id_actif',0)">
 <?php if ($table!='inscriptions'){
@@ -251,33 +231,10 @@ echo '<select name="type_action">
 </select>
 <input type="submit" name="action" value="action sur ids" />';
 }
-else{
-echo '<select name="type_action2">
-	<option>changer statut</option>
-	<option value="poubelle">poubelle</option>
-	<option value="annulé">annulé</option>
-	<option value="inscrit">inscrit</option>
-	<option value="spécifique">spécifique</option>
-	<option value="liste attente">liste attente</option>
-</select>
-<input type="submit" name="action" value="action sur ids" />';
-	}
 ?>
 </form>
 
-	</div>	
-		
-	</div>
-
-		<?php
-	mysql_close();
-	include 'blocs/pied.php';//LE MENU DU BAS
-	?>
-
-	<script type="javascript">
-	<?php
-	//if (isset($_GET['filtre1'])) echo 'document.formu.segement1.selected=true;';
-	?>
-	</script>
-</body>
-</html>
+ 
+            </div>
+          </div>
+<?php include 'blocs/footer-admin.php';?>	

@@ -11,8 +11,8 @@
        
               <section class="top-bar-section">
                 <ul class="left">
-                  <li><a href="eco-achat.php" title="Comparateur de produits bio écolos made in France">Valocable</a></li>
-                  <li><a href="eco-infos.php" title="Dossiers et actualités sur l'éco-consommation">Valopneu</a></li>
+                  <li><a href="eco-achat.php" title="Comparateur de produits bio Ã©colos made in France">Valocable</a></li>
+                  <li><a href="eco-infos.php" title="Dossiers et actualitÃ©s sur l'Ã©co-consommation">Valopneu</a></li>
                 </ul>
        
                 <ul class="right">

@@ -3,7 +3,7 @@
             <hr>
             <div class="row">
               <div class="large-6 columns">
-                <p>© Copyright eco-SAPIENS.</p>
+                <p>&copy; Copyright eco-SAPIENS.</p>
               </div>
               <div class="large-6 columns">
                 <ul class="inline-list right">
