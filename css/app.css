@@ -6,4 +6,4 @@ display:flex;
 flex-direction: row;
 flex-wrap: wrap; /*nowrap | wrap | wrap-reverse;*/
 }
-.flex_child{}
+.flexed{margin-right:5px;}

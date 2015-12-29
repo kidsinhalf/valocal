@@ -82,7 +82,7 @@ function db_delete($table, $tab_where, $debug=false){
 	}
 
 	//SELECT
-function db_select($sql, $tab_valeurs='', $debug=false){
+function db_select($sql, $tab_valeurs='', $debug=false, $optnum=''){
 	global $bdd;
 	if (empty($tab_valeurs)){
 		$req = $bdd->query($sql);
@@ -92,7 +92,8 @@ function db_select($sql, $tab_valeurs='', $debug=false){
 		$req = $bdd->prepare($sql);
 		$req->execute($tab_valeurs);
 		}
-	$donnees = $req->fetchAll(PDO::FETCH_ASSOC);//tableau associatif
+	if ($optnum=='num') $donnees = $req->fetchAll(PDO::FETCH_NUM);//tableau associatif
+	else $donnees = $req->fetchAll(PDO::FETCH_ASSOC);//tableau iteratif
 	$req->closeCursor(); 
 	
 	return $donnees;

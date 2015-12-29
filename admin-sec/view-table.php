@@ -106,43 +106,14 @@ if (!isset($_GET['page'])) $page=1; else $page=$_GET['page'];
 	
 	?>
 
-	<?php
-	//filtres
-	echo '
 	
-	<form method="get">
-		<fieldset>
-			<legend>Filtres</legend>
-			<div class="flex_parent">
-				<div class="flexed flex_parent">
-					<div class="flexed"><label class="prefix">filtre 1</label></div><div class="flexed"> <select name="segment1"><option></option>'.$html_form_select.'</select></div><div class="flexed"><input type="text" name="filtre1" value="" /></div>
-				</div>
-				<div class="flexed flex_parent">
-					<div class="flexed"><label class="prefix">filtre 2</label></div><div class="flexed"><select name="segment2"><option></option>'.$html_form_select.'</select></div><div class="flexed"><input type="text" name="filtre2" value="" /></div>
-				</div>
-				<div class="flexed"><input type="submit" class="button tiny" value="segment" /><input type="hidden" name="table" value="'.$table.'"></div>
-			</div>
-			</fieldset>
-		</form>
-	';
-
-		//import fichier
-		if ($table=='base_email' OR $table=='inscriptions' OR $table=='recettes' OR $table=='emails_desinscriptions' OR $table=='emails_retourserreurs'){
-			echo '
-				<form method="POST" enctype="multipart/form-data">
-				<img src="css/items/upload-page-green.gif" /><strong> Importer</strong> un fichier csv : <input type="file" name="fichier_csv" />
-				<input type="submit" name="action" value="importer" />
-				</form>';
-				}
-	
-	?>
 
 	
 	
 	<form name="main_form" method="post">
 	<table id="tabmain">
 	<?php
-echo '<caption>'.$nb_items.' éléments trouvés</caption>';
+echo '<caption>'.$table.' ('.$nb_items.' éléments trouvés)</caption>';
 echo '
 <thead>
 <tr>';
@@ -178,9 +149,9 @@ $id_item++;
 	//print_r($url_cles_primaires);
 		
 	echo '<td>
-			<input type="checkbox" name="id_actif[]" value="'.$donnees['id'].'" />
-			<a href="edit-table.php?table='.$table.'&action=modifier&'.implode('&',$url_cles_primaires).'"><img src="css/items/edit-blue.gif" /></a>';
-			if ($table!='inscriptions') echo '<a onclick="return confirm(\'êtes-vous sûr de vouloir supprimer ?\');" href="view-table.php?action=supprimer&table='.$table.'&'.implode('&',$url_cles_primaires).'"><img src="css/items/delete-page-red.gif" /></a>
+			<input type="checkbox" name="id_actif[]" class="id_actif" value="'.$donnees['id'].'" />
+			<a href="edit-table.php?table='.$table.'&action=modifier&'.implode('&',$url_cles_primaires).'"><img src="../img/icones/pencil.png" /></a>';
+			if ($table!='inscriptions') echo '<a onclick="return confirm(\'êtes-vous sûr de vouloir supprimer ?\');" href="view-table.php?action=supprimer&table='.$table.'&'.implode('&',$url_cles_primaires).'"><img src="../img/icones/cross.png" /></a>
 		</td>';
 		
 	
@@ -216,24 +187,65 @@ $(document).ready( function () {
     $('#tabmain').DataTable({
 		select: true,
 		scrollY: 300,
-		paging: false
+		paging: false,
+		info: false
 		});
 } );
 </script>
-<input type="button" name="CheckAll" value="Tous" onClick="checkall_uncheckall('id_actif',1)">
-<input type="button" name="UnCheckAll" value="Aucun" onClick="checkall_uncheckall('id_actif',0)">
+
 <?php if ($table!='inscriptions'){
-echo '<select name="type_action">
-	<option>---</option>
-	<option value="supprimer">supprimer</option>
-	<option value="valider">valider</option>
-	<option value="invalider">invalider</option>
-</select>
-<input type="submit" name="action" value="action sur ids" />';
+
+echo '
+	<div class="flex_parent">
+		<div class="flexed"><input type="checkbox" class="button tiny" value="Tous" onclick="if (this.checked) $(\'.id_actif\').prop(\'checked\', true ); else $(\'.id_actif\').prop(\'checked\', false );"></div>
+		
+		<div class="flexed">
+			<select name="type_action">
+			<option>action</option>
+			<option value="supprimer">supprimer</option>
+			<option value="valider">valider</option>
+			<option value="invalider">invalider</option>
+			</select>
+		</div>
+		<div class="flexed">
+			<input type="submit" class="button tiny" name="action" value="action sur ids" />
+		</div>
+</div>';
 }
 ?>
 </form>
 
+ 
+ <?php
+	//filtres
+	echo '
+	
+	<form method="get">
+		<fieldset>
+			<legend>Filtres</legend>
+			<div class="flex_parent">
+				<div class="flexed flex_parent">
+					<div class="flexed"><select name="segment1"><option>filtrer par</option>'.$html_form_select.'</select></div><div class="flexed"><input type="text" name="filtre1" value="" /></div>
+				</div>
+				<div class="flexed flex_parent">
+					<div class="flexed"><select name="segment2"><option>filtrer par</option>'.$html_form_select.'</select></div><div class="flexed"><input type="text" name="filtre2" value="" /></div>
+				</div>
+				<div class="flexed"><input type="submit" class="button tiny" value="segment" /><input type="hidden" name="table" value="'.$table.'"></div>
+			</div>
+			</fieldset>
+		</form>
+	';
+
+		//import fichier
+		if ($table=='base_email' OR $table=='inscriptions' OR $table=='recettes' OR $table=='emails_desinscriptions' OR $table=='emails_retourserreurs'){
+			echo '
+				<form method="POST" enctype="multipart/form-data">
+				<img src="../img/icones/upload-page-green.gif" /><strong> Importer</strong> un fichier csv : <input type="file" name="fichier_csv" />
+				<input type="submit" name="action" value="importer" />
+				</form>';
+				}
+	
+	?>
  
             </div>
           </div>
