@@ -1,4 +1,4 @@
-﻿.top-bar .name #logonav a{width: auto; }
+.top-bar .name #logonav a{width: auto; }
 
 /*Vive Flex !*/
 .flex_parent{
@@ -7,3 +7,17 @@ flex-direction: row;
 flex-wrap: wrap; /*nowrap | wrap | wrap-reverse;*/
 }
 .flexed{margin-right:5px;}
+
+input[type="text"].fdatepicker{background:url(../img/icones/calendar-day.png) right no-repeat; width:100px;}
+input[type="text"].ftimepicker{background:url(../img/icones/clock.png) right no-repeat; width:100px;}
+h1{text-align:center;}
+
+#apercu_ht, #apercu_ttc{display:inline-block; width:100px; border:solid 1px #bebebe; height: 30px;}
+
+.alert_lien{
+	padding:10px;
+	border-top: solid 2px teal;
+	border-bottom: solid 2px teal;
+	width:100px;
+	margin:auto;
+	}

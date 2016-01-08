@@ -2,15 +2,16 @@
               <ul class="title-area">
                  
                 <li class="name">
-                    <div id="logonav"><a href="<?php echo $url_base;?>"><img src="../img/logo-nav.png" alt="Valocal" /></a></div>
+                    <div id="logonav"><a href="<?php echo $url_base;?>admin-sec/"><img src="../img/logo-nav.png" alt="Valocal" /></a></div>
                 </li>
                 <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
               </ul>
        
               <section class="top-bar-section">
                 <ul class="left">
-                  <li><a href="#" title="en attente">Valocable</a></li>
-                  <li><a href="#" title="en attente">Valopneu</a></li>
+                  <li><a href="view-table.php?table=parametres" title="Parametres">Parametres</a></li>
+                  <li><a href="view-table.php?table=cours" title="Cours Bourse">Cours du cuivre</a></li>
+                  <li><a href="#" title="Statistiques">Statistiques</a></li>
                 </ul>
        
                 <ul class="right">

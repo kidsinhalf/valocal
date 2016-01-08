@@ -4,8 +4,15 @@ include '../inc/baseconnect.php';
 include '../inc/fonctions.php';
 $tab_alerte=array();
 include 'inc/recuperation-get.php';
-if (!empty($_POST)) include 'inc/recuperation-post.php';
 
+
+$tab_fournisseurs=array();
+//$query_fournisseurs='';
+$reponse_temp=db_select('SELECT id,nom FROM clients', array());
+foreach ($reponse_temp as $donnees_temp){
+	$tab_fournisseurs[$donnees_temp['id']]=$donnees_temp['nom'];
+	}
+//var_dump($tab_fournisseurs);
 /* Options fondamentales */
 $table=$_GET['table'];
 $nb_items_par_page=100;
@@ -32,18 +39,19 @@ foreach ($donnees_champs as $tab_champs){
 		}
 }
 
+if (!empty($_POST)) include 'inc/recuperation-post.php';
 
 ?>
 <?php include 'blocs/header-admin.php';?>  
     <div class="row">
         <div class="large-12 columns">
 		<?php include 'blocs/menu-admin.php';?>  
-          </div>
+        </div>
     </div>
 
     <div class="row">
         <div class="large-12 columns">
-			<h1>Accueil</h1>
+			<h1 class="text-center"><?php echo $table;?></h1>
             <?php if (!empty($tab_alerte)) foreach ($tab_alerte as $alerte) echo $alerte; //Le tableau d'alertes?>
        
 <!-- Code à modifier-->
@@ -74,7 +82,7 @@ foreach ($tab_champs_nom as $champs_nom){
 		}
 		
 		if (!empty($tab_clause_where)) $clause_where=' WHERE '.implode(' AND ',$tab_clause_where);
-		
+		//echo $clause_where;
 $id_item=0;
 
 $query='SELECT COUNT(id) AS total FROM '.$table.$clause_where;
@@ -108,7 +116,7 @@ if (!isset($_GET['page'])) $page=1; else $page=$_GET['page'];
 
 	
 
-	
+	<div class="text-center"><a class="button success" href="edit-table.php?table=<?php echo $table;?>&action=nouveau">Ajouter</a></div>
 	
 	<form name="main_form" method="post">
 	<table id="tabmain">
@@ -125,18 +133,13 @@ echo '</tr>
 ';
 
 
-$order='ORDER BY '.$tab_champs_nom[0].' DESC';	
+$order='ORDER BY id DESC';	
 $query='SELECT '.implode(',',$tab_champs_nom).' FROM '.$table.$clause_where.' '.$order.' LIMIT '.$deb.', '.$nb_items_par_page;
 //echo $query;
 $donnees_all=db_select($query);
 foreach ($donnees_all as $donnees){
 $id_item++;
 		
-	if (isset($_POST['id']) AND $_POST['id']==$donnees['id']) $tr_couleur='#aa66aa';
-	if (isset($donnees['statut']) AND $donnees['statut']=='liste attente') $tr_couleur='#e0d5e3';
-	if (isset($donnees['statut']) AND $donnees['statut']=='annulé') $tr_couleur='#f1e4e1';
-	if (isset($donnees['statut']) AND $donnees['statut']=='absent') $tr_couleur='#c8eac8';
-	if (isset($donnees['statut']) AND $donnees['statut']=='poubelle') $tr_couleur='#e5e6c0';
 	
 	echo '<tr id="ancre_'.$donnees['id'].'">';
 	
@@ -147,24 +150,32 @@ $id_item++;
 		$url_cles_primaires[]=$nom_cles_primaires.'='.$donnees[$nom_cles_primaires];
 		}
 	//print_r($url_cles_primaires);
-		
+		//<input type="checkbox" name="id_actif[]" class="id_actif" value="'.$donnees['id'].'" />
 	echo '<td>
-			<input type="checkbox" name="id_actif[]" class="id_actif" value="'.$donnees['id'].'" />
+			
 			<a href="edit-table.php?table='.$table.'&action=modifier&'.implode('&',$url_cles_primaires).'"><img src="../img/icones/pencil.png" /></a>';
-			if ($table!='inscriptions') echo '<a onclick="return confirm(\'êtes-vous sûr de vouloir supprimer ?\');" href="view-table.php?action=supprimer&table='.$table.'&'.implode('&',$url_cles_primaires).'"><img src="../img/icones/cross.png" /></a>
+			if ($table=='inscriptions') echo '<a onclick="return confirm(\'êtes-vous sûr de vouloir supprimer ?\');" href="view-table.php?action=supprimer&table='.$table.'&'.implode('&',$url_cles_primaires).'"><img src="../img/icones/cross.png" /></a>
 		</td>';
 		
 	
 	for ($i_champ=0;$i_champ<sizeof($tab_champs_nom);$i_champ++) {
-
-		if ($tab_champs_type[$i_champ] == 'text' OR $tab_champs_type[$i_champ] == 'mediumtext') echo '<td onclick="zoom_message(\'message_'.$tab_champs_nom[$i_champ].'_'.$id_item.'\');"><div class="cellule_a_zoomer" id="message_'.$tab_champs_nom[$i_champ].'_'.$id_item.'">'.$donnees[$i_champ].'</div></td>';
+		//dero à faire
+		
+		
+		if ($tab_champs_type[$i_champ] == 'text' OR $tab_champs_type[$i_champ] == 'mediumtext'){
+			echo '';//initialement aperçu des longs textes
+			}
 		else {
-			
+		//var_dump($donnees[$tab_champs_nom[$i_champ]]);
 		//qqs champs en particulier
 		switch ($tab_champs_nom[$i_champ]){
 			case 'contact_mail': echo '<td><a href="mailto:'.$donnees[$i_champ].'">'.$donnees[$i_champ].'</a></td>';
 			break;
 			case 'url_site': echo '<td><a target="blank" href="http://'.str_replace('http://','',$donnees[$i_champ]).'">'.$donnees[$i_champ].'</a></td>';
+			break;
+			case 'client': //renommer en id_client ?
+			case 'fournisseur': //renommer en id_fournisseur ?
+			echo '<td>'.$tab_fournisseurs[$donnees[$tab_champs_nom[$i_champ]]].'</td>';
 			break;
 			//qqs champs en particulier
 			default: echo '<td>'.$donnees[$tab_champs_nom[$i_champ]].'</td>';
@@ -193,11 +204,11 @@ $(document).ready( function () {
 } );
 </script>
 
-<?php if ($table!='inscriptions'){
+<?php if (1==0){
 
 echo '
 	<div class="flex_parent">
-		<div class="flexed"><input type="checkbox" class="button tiny" value="Tous" onclick="if (this.checked) $(\'.id_actif\').prop(\'checked\', true ); else $(\'.id_actif\').prop(\'checked\', false );"></div>
+		<div class="flexed"><input type="checkbox" class="big" value="Tous" onclick="if (this.checked) $(\'.id_actif\').prop(\'checked\', true ); else $(\'.id_actif\').prop(\'checked\', false );"></div>
 		
 		<div class="flexed">
 			<select name="type_action">
@@ -225,10 +236,10 @@ echo '
 			<legend>Filtres</legend>
 			<div class="flex_parent">
 				<div class="flexed flex_parent">
-					<div class="flexed"><select name="segment1"><option>filtrer par</option>'.$html_form_select.'</select></div><div class="flexed"><input type="text" name="filtre1" value="" /></div>
+					<div class="flexed"><select name="segment1"><option value="">filtrer par</option>'.$html_form_select.'</select></div><div class="flexed"><input type="text" name="filtre1" value="" /></div>
 				</div>
 				<div class="flexed flex_parent">
-					<div class="flexed"><select name="segment2"><option>filtrer par</option>'.$html_form_select.'</select></div><div class="flexed"><input type="text" name="filtre2" value="" /></div>
+					<div class="flexed"><select name="segment2"><option value="">filtrer par</option>'.$html_form_select.'</select></div><div class="flexed"><input type="text" name="filtre2" value="" /></div>
 				</div>
 				<div class="flexed"><input type="submit" class="button tiny" value="segment" /><input type="hidden" name="table" value="'.$table.'"></div>
 			</div>
