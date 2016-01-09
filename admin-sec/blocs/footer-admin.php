@@ -6,7 +6,7 @@
                 <p>© Copyright eco-SAPIENS.</p>
               </div>
               <div class="large-6 columns">
-                <ul class="inline-list right">
+                <ul class="inline-list right" style="display:none">
                   <li><a href="/valocal/webslim/contact/">Contact</a></li>
                   <li><a href="#">Link 2</a></li>
                   <li><a href="#">Link 3</a></li>

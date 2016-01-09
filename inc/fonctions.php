@@ -47,9 +47,7 @@ function db_update($table, $tab_valeurs, $tab_where, $debug=false){
 	if ($req->execute($tab_merged)){
 		$affected_rows = $req->rowCount();
 		}
-	else{
-		$affected_rows=-1;
-		}
+	else $affected_rows=-1;
 	return $affected_rows;
 	
 	}

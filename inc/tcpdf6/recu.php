@@ -106,8 +106,8 @@ $pdf->writeHTML($txt1);
 // ---------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('C:\wamp\www\valocal\valocal\admin-sec\pdf\recus\recu_'.$id_achats.'.pdf', 'F'); //F for saving output to file
-//$pdf->Output('/home/clients/fdd1a6019f1e8376cbae15369dc54de1/web/applis/admin-sec/pdf/recus/recu_'.$id_achats.'.pdf', 'F'); //F for saving output to file
+//$pdf->Output('C:\wamp\www\valocal\valocal\admin-sec\pdf\recus\recu_'.$id_achats.'.pdf', 'F'); //F for saving output to file
+$pdf->Output('/home/clients/fdd1a6019f1e8376cbae15369dc54de1/web/applis/admin-sec/pdf/recus/recu_'.$id_achats.'.pdf', 'F'); //F for saving output to file
 $pdf->Output('Recu-VALOCAL-'.$id_achats.'.pdf', 'I');
 
 }

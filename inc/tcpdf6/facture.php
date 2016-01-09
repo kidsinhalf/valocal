@@ -1,52 +1,31 @@
 <?php
-$id_inscriptions=$_GET['id'];
-if ((isset($_SESSION['utilisateur']) AND isset($_SESSION['utilisateur']['id']) AND $_SESSION['utilisateur']['id']>0) OR (isset($_GET['hash']) AND $_GET['hash']=='to6fG9i7u6x44')){
-	if (isset($_GET['hash']) AND $_GET['hash']=='to6fG9i7u6x44'){
-		$reponse=mysql_query('SELECT * FROM inscriptions WHERE id='.$id_inscriptions);
-		}
-	else{
-		$reponse=mysql_query('SELECT * FROM inscriptions WHERE id='.$id_inscriptions.' AND id_personnes='.$_SESSION['utilisateur']['id']);
-		}
+$id=intval($_GET['id']);
+$reponse=db_select('SELECT * FROM ventes WHERE id=?', array($id));
+if (!empty($reponse)){
+$donnees=array_map('utf8_decode',$reponse[0]);
+$id_ventes=$donnees['id'];
+$id_personnes=$donnees['client'];
+$prix_ht=$donnees['prix_ht'];
+$date=date_us2fr($donnees['date']);
 
-if (mysql_num_rows($reponse)){
-$donnees=mysql_fetch_array($reponse);
-$id_personnes=$donnees['id_personnes'];
-if ($donnees['id_activites']>0){
-	$table_prestactivites='activites';
-	$id_prestactivites=$donnees['id_activites'];
-	}
-if ($donnees['id_prestations']>0){
-	$table_prestactivites='prestations';
-	$id_prestactivites=$donnees['id_prestations'];
-	}
-
-$reponse_personnes=mysql_query('SELECT * FROM personnes WHERE id='.$id_personnes);
-$donnees_personnes=mysql_fetch_array($reponse_personnes);
-
-$reponse_activites=mysql_query('SELECT * FROM '.$table_prestactivites.' WHERE id='.$id_prestactivites);
-$donnees_prestactivites=mysql_fetch_array($reponse_activites);
-
-$tab_participants=array();
-$reponse_partcipants=mysql_query('SELECT * FROM inscriptions_invites WHERE id_inscriptions='.$id_inscriptions);
-while ($donnees_participants=mysql_fetch_assoc($reponse_partcipants)){
-	$tab_participants[]=array('nom'=>$donnees_participants['nom'], 'prenom'=>$donnees_participants['prenom']);
-	}
+$reponse_personnes=db_select('SELECT * FROM clients WHERE id=?', array($id_personnes), true);
+if (!empty($reponse_personnes)){
+	//ici pb encodage UTF8
+	$donnees_personnes=array_map('utf8_decode', $reponse_personnes[0]);
+	//$donnees_personnes=$reponse_personnes[0];//Si pas de pb encodage...
 	
-$reponse_recettes=mysql_query('SELECT * FROM recettes WHERE id_inscriptions='.$id_inscriptions);
-$sum_recettes=0;
-while ($donnees_recettes=mysql_fetch_assoc($reponse_recettes)){
-	if ($donnees_recettes['date']!='0000-00-00') $sum_recettes+=$donnees_recettes['montant'];
-	$last_date=$donnees_recettes['date'];
+	$nom=$donnees_personnes['nom'];
+	$prenom=$donnees_personnes['prenom'];
+	$adresse=$donnees_personnes['adresse'];
+	$cp=$donnees_personnes['cp'];
+	$ville=$donnees_personnes['ville'];
 	}
 
 
 
+include 'facture-content.php';
 
-list($annee,$mois,$jour)=explode('-',$donnees['date']);
-
-include 'tcpdf/content-inscription-facture.php';
-
-require_once('config/lang/fr.php');
+//require_once('config/lang/fr.php');
 require_once('tcpdf.php');
 require_once('tcpdf_ext.php');
 // Colored table
@@ -57,10 +36,10 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, false, 'ISO-88
 
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
-$pdf->SetAuthor('Association La Tracce');
-$pdf->SetTitle('Facture Inscription La Trace');
-$pdf->SetSubject('Facture La Trace');
-$pdf->SetKeywords('La  Trace, livre');
+$pdf->SetAuthor('SCIC VALOCAL');
+$pdf->SetTitle('Facture SCIC VALOCAL');
+$pdf->SetSubject('Facture SCIC VALOCAL');
+$pdf->SetKeywords('Facture SCIC VALOCAL');
 
 // set default header data
 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -84,7 +63,7 @@ $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); 
 
 //set some language-dependent strings
-$pdf->setLanguageArray($l); 
+//$pdf->setLanguageArray($l); 
 
 // ---------------------------------------------------------
 
@@ -93,7 +72,7 @@ $pdf->SetFont('times', 'B', 17);
 $pdf->AddPage();
 $pdf->SetTextColor(190);
 $pdf->SetY(5);
-//$pdf->Write(10, 'Facture Inscription LT_'.$donnees['id'],'',0, 'R',true);
+$pdf->Write(10, 'Facture '.$id_ventes.' ','',0, 'R',true);
 /*écriture "ACQUITTEE"
 if ($donnees['paiement']==1){
 $pdf->SetFont('times', '', 49);
@@ -102,24 +81,34 @@ $pdf->SetTextColor(250,0,0);
 $pdf->Write(10, 'ACQUITTE','',0, 'R',true);
 }
 */
-$pdf->SetFont('times', '', 10);
+$pdf->SetFont('times', '', 9);
 $pdf->SetY(30);
 $pdf->SetTextColor(0);
 
 
 
+// set columns width
+$first_column_width = 100;
+$second_column_width = 60;
+
+// get current vertical position
+$current_y_position = $pdf->getY();
+
 //trois colonnes
+$pdf->writeHTMLCell($first_column_width, '', '', $current_y_position, $txt_nous, 1, 0, 0, true);
+$pdf->writeHTMLCell($second_column_width, '', 133, '', $txt_eux, 1, 0, 0, true);
+$pdf->writeHTMLCell($second_column_width, '', 133, 60, $txt_divers, 1, 1, 0, 'C', true);
 $pdf->writeHTML($txt1);
+
 
 
 
 // ---------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('Facture-LaTrace-'.$annee.'.pdf', 'I');
+//$pdf->Output('C:\wamp\www\valocal\valocal\admin-sec\pdf\factures\facture_'.$id_ventes.'.pdf', 'F'); //F for saving output to file
+$pdf->Output('/home/clients/fdd1a6019f1e8376cbae15369dc54de1/web/applis/admin-sec/pdf/recus/recu_'.$id_ventes.'.pdf', 'F'); //F for saving output to file
+$pdf->Output('Facture-VALOCAL-'.$id_ventes.'.pdf', 'I');
 
 }
-else echo 'echec identification';
-}
-else echo 'identification obligatoire';
 ?>
