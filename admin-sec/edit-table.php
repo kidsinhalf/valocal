@@ -97,8 +97,8 @@ for ($j=0;$j<sizeof($tab_champs_nom);$j++){
 for ($i=0;$i<sizeof($tab_champs_nom);$i++){
 	echo '
 	<div class="row">
-		<div class="large-3 columns"><label for="fid_'.$i.'" class="right inline">'.$tab_champs_nom[$i].'</label></div>
-		<div class="large-9 columns">';
+		<div class="small-3 columns"><label for="fid_'.$i.'" class="right inline">'.$tab_champs_nom[$i].'</label></div>
+		<div class="small-9 columns">';
 	//echo '<em>'.$tab_champs_comments[$i].'</em>';
 		
 		//INSPECTION COMMENTAIRE TABLE
@@ -182,7 +182,10 @@ for ($i=0;$i<sizeof($tab_champs_nom);$i++){
 			// cas spécifiques en fonction du nom du champ
 			switch ($tab_champs_nom[$i]){
 				case 'id':
-				echo '<input type="text" name="id" readonly value="'.$donnees['id'].'" />';
+				if ($action=='nouveau'){$class_id_display=' style="display:none"' ;}
+				else {$class_id_display='';}
+				
+				echo '<input'.$class_id_display.' type="text" name="id" readonly value="'.$donnees['id'].'" />';
 				break;
 				
 				case 'cours':

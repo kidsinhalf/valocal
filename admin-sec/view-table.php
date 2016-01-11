@@ -12,7 +12,8 @@ $reponse_temp=db_select('SELECT id,nom FROM clients', array());
 foreach ($reponse_temp as $donnees_temp){
 	$tab_fournisseurs[$donnees_temp['id']]=$donnees_temp['nom'];
 	}
-//var_dump($tab_fournisseurs);
+
+	
 /* Options fondamentales */
 $table=$_GET['table'];
 $nb_items_par_page=100;
@@ -121,12 +122,23 @@ if (!isset($_GET['page'])) $page=1; else $page=$_GET['page'];
 	<form name="main_form" method="post">
 	<table id="tabmain">
 	<?php
+	
+	$tab_cols_bonus=array();
+	$tab_cells_bonus=array();
+if ($table=='achats' OR $table=='ventes'){
+	$tab_cols_bonus[]='pdf';
+	if ($table=='achats') $type_doc='recu';
+	if ($table=='ventes') $type_doc='facture';
+	$tab_cells_bonus[]='<a href="file-gen.php?type='.$type_doc.'&id=#id#">générer</a>';
+	}
+	
 echo '<caption>'.$table.' ('.$nb_items.' éléments trouvés)</caption>';
 echo '
 <thead>
 <tr>';
 echo '<th>action</th>';
 foreach ($tab_champs_nom as $champ_nom) echo '<th>'.$champ_nom.'</th>';
+if (!empty($tab_cols_bonus)) foreach ($tab_cols_bonus as $cols_bonus) echo '<th>'.$cols_bonus.'</th>';
 echo '</tr>
 </thead>
 <tbody>
@@ -184,7 +196,25 @@ $id_item++;
 		}
 	}
 	
-			
+	//colonnes supplementaires
+	if (!empty($tab_cells_bonus)){
+		foreach ($tab_cells_bonus as $cells_bonus){
+			echo '
+			<td>'.str_replace('#id#', $donnees['id'], $cells_bonus).'';
+			switch ($table){
+				case 'ventes': $loc_fichier='pdf/factures/facture_'.$donnees['id'].'.pdf';
+				break;
+				case 'achats': $loc_fichier='pdf/recus/recu_'.$donnees['id'].'.pdf';
+				break;
+				default: $loc_fichier='';
+				}
+			if (file_exists($loc_fichier)){
+				echo '<div><a href="'.$loc_fichier.'" target="blank"><img src="../img/icones/document-pdf.png" alt="PDF" /></a></div>';}
+			echo '
+			</td>';
+			}
+		
+		}
 			
 	echo '</tr>';
 	}

@@ -12,8 +12,8 @@ $tab_regex=array();
 //$tab_url[]='http://www.lme.com/metals/non-ferrous/copper/';
 //$tab_regex[]='<td>Cash Buyer</td>\s<td>(.*)</td>';
 
-//$tab_url[]='http://www.infomine.com/investment/metal-prices/copper/';
-$tab_url[]='blocs/exemple.txt';
+$tab_url[]='http://www.infomine.com/investment/metal-prices/copper/';
+//$tab_url[]='blocs/exemple.txt';
 $tab_regex[]='\| ([0123456789 .,]*) EUR/t'; //| 4,310.75 EUR/t)
 
 
