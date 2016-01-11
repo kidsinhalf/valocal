@@ -11,4 +11,11 @@ $quick=db_select('SELECT titre, pourcentage_interne FROM parametres WHERE catego
 foreach($quick as $res){
 	$tab_cuivres_achat[$res['titre']]=$res['pourcentage_interne'];
 	}
+	
+	
+$cours_default=0;
+$donnees_cours=db_select('SELECT * FROM cours WHERE date= ? ', array(date('Y-m-d')), true);
+if (!empty($donnees_cours)){
+	$cours_default=$donnees_cours[0]['valeur_euro_tonne'];
+	}
 ?>

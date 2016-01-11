@@ -2,8 +2,7 @@
 $donnees=db_select('SELECT * FROM cours WHERE date= ? ', array(date('Y-m-d')), true);
 //var_dump($donnees);
 if (empty($donnees)){
-	
-	
+
 
 //mise à jour du cours du cuivre
 $tab_url=array();
@@ -22,12 +21,32 @@ $tab_regex[]='\| ([0123456789 .,]*) EUR/t'; //| 4,310.75 EUR/t)
 
 $j=0;
 foreach ($tab_url as $url){
+
+	$ch = curl_init();
+curl_setopt ($ch, CURLOPT_URL, $url);
+curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 5);
+curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
+$contents = curl_exec($ch);
+if (curl_errno($ch)) {
+  echo curl_error($ch);
+  echo "\n<br />";
+  $contents = '';
+} else {
+  curl_close($ch);
+}
+
+if (!is_string($contents) || !strlen($contents)) {
+echo "Failed to get contents.";
+$contents = '';
+}
+
+
 	//echo '<div>'.$url.'</div>';
-	$content=file_get_contents($url);
+	//$content=file_get_contents($url); pb de allow_url
 	//$content=strip_tags($content);
 	$regexp = $tab_regex[$j];
 	//echo '<div>regex : '.$regexp.'</div>';
-	if (preg_match_all("#$regexp#", $content, $matches)) {
+	if (preg_match_all("#$regexp#", $contents, $matches)) {
 		$value=$matches[1][0];
 		//echo ($value);//format americain
 		$cours_cuivre=str_replace(',','', $value);

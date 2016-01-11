@@ -9,6 +9,9 @@
        
               <section class="top-bar-section">
                 <ul class="left">
+                  <li><a href="view-table.php?table=clients" title="Parametres">Clients</a></li>
+                  <li><a href="view-table.php?table=achats" title="Parametres">Achats</a></li>
+                  <li><a href="view-table.php?table=ventes" title="Parametres">Ventes</a></li>
                   <li><a href="view-table.php?table=parametres" title="Parametres">Parametres</a></li>
                   <li><a href="view-table.php?table=cours" title="Cours Bourse">Cours du cuivre</a></li>
                   <li><a href="#" title="Statistiques">Statistiques</a></li>

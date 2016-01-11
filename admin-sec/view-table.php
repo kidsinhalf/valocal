@@ -136,7 +136,7 @@ echo '<caption>'.$table.' ('.$nb_items.' éléments trouvés)</caption>';
 echo '
 <thead>
 <tr>';
-echo '<th>action</th>';
+echo '<th> </th>';
 foreach ($tab_champs_nom as $champ_nom) echo '<th>'.$champ_nom.'</th>';
 if (!empty($tab_cols_bonus)) foreach ($tab_cols_bonus as $cols_bonus) echo '<th>'.$cols_bonus.'</th>';
 echo '</tr>

@@ -8,7 +8,8 @@ if (!empty($_POST)) include 'inc/recuperation-post.php';
 
 /* Options fondamentales */
 $table=$_GET['table'];
-switch ($_GET['action']){
+$action=$_GET['action'];
+switch ($action){
 	case 'nouveau': $action_titre='Insertion';break;
 	case 'modifier': $action_titre='Modification';break;
 	default: $action_titre='Kesako ?';break;
@@ -34,14 +35,14 @@ foreach ($donnees_champs as $tab_champs){
 
 	
 //CAS MODIF UPDATE (recupeation des données existantes)
-if ($_GET['action']!='nouveau'){
+if ($action!='nouveau'){
 $sql='SELECT * FROM '.$table.' WHERE '.$sql_cle_primaire;
 $donnees_all=db_select($sql);
 $donnees=$donnees_all[0];
 }
 
 //CAS NOUVEAU
-if ($_GET['action']=='nouveau'){
+if ($action=='nouveau'){
 $donnees=array();
 //initialisation avec valeurs par défaut
 for ($j=0;$j<sizeof($tab_champs_nom);$j++){
@@ -197,6 +198,14 @@ for ($i=0;$i<sizeof($tab_champs_nom);$i++){
 					echo '<input type="text" onchange="calcul_prix_'.$table.'()" id="fid_'.$i.'" name="'.$tab_champs_nom[$i].'" value="'.$cours_default.'" style="width:100px; display:inline" /> €/t';
 				break;
 				
+				
+				
+				case 'taux_achat':
+				case 'taux_vente':
+					echo '<input type="text" onchange="calcul_prix_'.$table.'()" id="fid_'.$i.'" name="'.$tab_champs_nom[$i].'" value="'.$donnees[$tab_champs_nom[$i]].'" style="width:100px; display:inline" /> €/t';
+				break;
+				
+				
 				case 'tva':
 					echo '<input type="text" onchange="calcul_prix_'.$table.'()" id="fid_'.$i.'" name="'.$tab_champs_nom[$i].'" value="'.$donnees[$tab_champs_nom[$i]].'" style="width:100px; display:inline" /> %';
 				break;
@@ -206,7 +215,7 @@ for ($i=0;$i<sizeof($tab_champs_nom);$i++){
 				break;
 				
 				case 'categorie_params':
-					echo '<select name="'.$tab_champs_nom[$i].'" onchange="calcul_prix_'.$table.'()">';
+					echo '<select name="'.$tab_champs_nom[$i].'" onchange="calcul_prix_'.$table.'();alert(\'t\')">';
 					$reponse_temp=db_select('SELECT * FROM parametres WHERE categorie= ? ', array('categorie_'.$table), true);
 					if (!empty($reponse_temp)){
 						foreach ($reponse_temp as $donnees_temp){
@@ -241,8 +250,8 @@ for ($i=0;$i<sizeof($tab_champs_nom);$i++){
 <input type="hidden" name="table" value="<?php echo $table;?>" />
 <div class="text-center">
 <?php
-if ($_GET['action']=='nouveau') echo '<input class="button" type="submit" name="action" value="nouveau" />';
-if ($_GET['action']=='modifier') echo '<input class="button" type="submit" name="action" value="modifier" />';
+if ($action=='nouveau') echo '<input class="button" type="submit" name="action" value="nouveau" />';
+if ($action=='modifier') echo '<input class="button" type="submit" name="action" value="modifier" />';
 ?>
 </div>	
 	</form>
@@ -252,18 +261,7 @@ if ($_GET['action']=='modifier') echo '<input class="button" type="submit" name=
 
 		<div class="large-4 columns">
 		<?php if ($table=='achats' OR $table=='ventes'){
-		echo '
-		
-		<p>Achat = Emettre un reçu</p>
-		<p>Vente = Emettre une facture</p>';
-		
-		
-			echo '<div class="button tiny" onclick="calcul_prix_'.$table.'()">Calculer</div>';
-			
-
-			
-			echo '<div><span id="apercu_ht"></span> €  HT</div>';
-			echo '<div><span id="apercu_ttc"></span> €  TTC</div>';
+		include 'blocs/memo-cuivre.php';
 		
 		}
 		?>
@@ -271,85 +269,6 @@ if ($_GET['action']=='modifier') echo '<input class="button" type="submit" name=
 </div>
 	
 
-<script>
-function choisir_select(select) {
-	if(select.value == 'choix') {
-		var choix = document.createElement('input');
-		choix.type= 'text';
-		choix.onblur= function() {
-		var option = document.createElement('option');
-		option.innerHTML = choix.value;
-		option.value = choix.value;
-		choix.parentNode.replaceChild(select, choix);
-		select.insertBefore(option, select.firstChild);
-		select.selectedIndex = 0;
-		}
-		select.parentNode.replaceChild(choix, select);
-	}
-	select.focus();
-}
-
-$('.fdatepicker').fdatepicker({
-  language: 'fr',
-  format: 'dd/mm/yyyy'
-});
-
-$('.fdatepicker').fdatepicker({
-  language: 'fr',
-  format: 'hh:ii:ss'
-});
-
-function calcul_prix_achats(){
-	var poids=$('input[name="poids"]').val();
-	var cours=$('input[name="cours"]').val();
-	var categorie=$('select[name="categorie_params"]').val();
-	switch (categorie){
-		<?php
-		foreach ($tab_cuivres_achat as $nom_cuivre=>$pourcentage_interne){
-			echo '
-			case \''.$nom_cuivre.'\': var qualite = '.$pourcentage_interne.'; break;';
-			}
-		?>
-		}
-	
-	
-	
-	var prix_tonne=poids*(qualite/100)*cours;
-	var prix_ht=(prix_tonne/1000).toFixed(2);
-	var prix_ttc=(prix_ht*1).toFixed(2);//pas de TVA
-
-	$('#apercu_ht').text(prix_ht);
-	$('#apercu_ttc').text(prix_ttc);
-	
-	$('input[name="prix_ht"]').val(prix_ht);
-	}
-	
-function calcul_prix_ventes(){
-	var poids=$('input[name="poids"]').val();
-	var cours=$('input[name="cours"]').val();
-	var categorie=$('select[name="categorie_params"]').val();
-	switch (categorie){
-		<?php
-		foreach ($tab_cuivres_vente as $nom_cuivre=>$pourcentage_interne){
-			echo '
-			case \''.$nom_cuivre.'\': var qualite = '.$pourcentage_interne.'; break;';
-			}
-		?>
-		}
-	
-	
-	var prix_tonne=poids*(qualite/100)*cours;
-	var prix_ht=(prix_tonne/1000).toFixed(2);
-	var prix_ttc=(prix_ht*1.2).toFixed(2);
-
-	$('#apercu_ht').text(prix_ht);
-	$('#apercu_ttc').text(prix_ttc);
-	
-	$('input[name="prix_ht"]').val(prix_ht);
-	}
-
-
-</script>
 
 
 
