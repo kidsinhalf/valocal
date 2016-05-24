@@ -48,6 +48,34 @@ include 'inc/recuperation-get.php';
 				<a class="button" href="view-table.php?table=ventes" title="Nouvelle vente">Ventes</a>
 				</div>
 			</div>
+			
+			<div class="row">
+				<div class="small-12 text-center large-4 columns">
+				<a class="button success" href="view-table.php?table=tva" title="Nouveau client">TVA</a>
+				</div>
+				
+				<div class="small-12 text-center large-4 columns">
+				<a class="button success" href="edit-table.php?table=depenses&action=nouveau" title="Nouvelle facture">Nouvelle dépense</a>
+				</div>
+				
+				<div class="small-12 text-center large-4 columns">
+				<a class="button success" href="edit-table.php?table=recettes&action=nouveau" title="Nouvelle recette">Nouvelle recette</a>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="small-12 text-center large-4 columns">
+				<a class="button" href="calcul-tva.php" title="#">#</a>
+				</div>
+				
+				<div class="small-12 text-center large-4 columns">
+				<a class="button" href="view-table.php?table=depenses" title="Factures">Dépenses</a>
+				</div>
+				
+				<div class="small-12 text-center large-4 columns">
+				<a class="button" href="view-table.php?table=recettes" title="Recettes">Recettes</a>
+				</div>
+			</div>
        
 <!-- Code à modifier-->
 <?php

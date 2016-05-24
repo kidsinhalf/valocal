@@ -215,7 +215,7 @@ for ($i=0;$i<sizeof($tab_champs_nom);$i++){
 				break;
 				
 				case 'categorie_params':
-					echo '<select name="'.$tab_champs_nom[$i].'" onchange="calcul_prix_'.$table.'();alert(\'t\')">';
+					echo '<select name="'.$tab_champs_nom[$i].'" onchange="calcul_prix_'.$table.'();">';
 					$reponse_temp=db_select('SELECT * FROM parametres WHERE categorie= ? ', array('categorie_'.$table), true);
 					if (!empty($reponse_temp)){
 						foreach ($reponse_temp as $donnees_temp){
@@ -262,7 +262,6 @@ if ($action=='modifier') echo '<input class="button" type="submit" name="action"
 		<div class="large-4 columns">
 		<?php if ($table=='achats' OR $table=='ventes'){
 		include 'blocs/memo-cuivre.php';
-		
 		}
 		?>
 		</div>
@@ -276,4 +275,32 @@ if ($action=='modifier') echo '<input class="button" type="submit" name="action"
  
             </div>
           </div>
+<script>
+function choisir_select(select) {
+	if(select.value == 'choix') {
+		var choix = document.createElement('input');
+		choix.type= 'text';
+		choix.onblur= function() {
+		var option = document.createElement('option');
+		option.innerHTML = choix.value;
+		option.value = choix.value;
+		choix.parentNode.replaceChild(select, choix);
+		select.insertBefore(option, select.firstChild);
+		select.selectedIndex = 0;
+		}
+		select.parentNode.replaceChild(choix, select);
+	}
+	select.focus();
+}
+
+$('.fdatepicker').fdatepicker({
+  language: 'fr',
+  format: 'dd/mm/yyyy'
+});
+
+$('.fdatepicker').fdatepicker({
+  language: 'fr',
+  format: 'hh:ii:ss'
+});
+</script>
 <?php include 'blocs/footer-admin.php';?>

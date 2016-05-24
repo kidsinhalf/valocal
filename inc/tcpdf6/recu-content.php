@@ -16,6 +16,10 @@ $txt_eux='
 
 $txt_divers='Autoliquidation de TVA';
 
+$txt_tva='TVA Due par l\'Acquéreur. Article 283.2 sexies du C.G.I.';
+
+$txt_divers.='<br />'.$txt_tva;
+
 $txt1='
 <h1 style="text-align:center">
 Reçu de vente
@@ -35,7 +39,7 @@ $txt1.='
 <tr>
 	<td style="border: solid 1px #bebebe; padding:5px">'.$donnees['categorie_params'].'</td>
 	<td style="border: solid 1px #bebebe; padding:5px">'.$donnees['poids'].' kg</td>
-	<td style="border: solid 1px #bebebe; padding:5px">'.$donnees['cours'].'</td>
+	<td style="border: solid 1px #bebebe; padding:5px">'.($donnees['taux_achat']/1000).' €/kg</td>
 	<td style="border: solid 1px #bebebe; padding:5px"><strong>'.$prix_ht.' €</strong></td>
 </tr>
 </table>';

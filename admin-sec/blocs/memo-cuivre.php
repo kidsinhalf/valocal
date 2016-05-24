@@ -20,37 +20,16 @@ echo '
 			
 			echo '</table>';
 			
-			echo '<div class="button tiny" onclick="calcul_taux(\''.$table.'\'); calcul_prix_'.$table.'()">Calculer</div>';
+			echo '
+			<div class="row">
+				<div class="small-6 columns"><div class="button tiny" onclick="calcul_taux(\''.$table.'\');">Calculer taux</div></div>
+				<div class="small-6 columns"><div class="button tiny" onclick="calcul_taux(\''.$table.'\'); calcul_prix_'.$table.'()">Calculer tout</div></div>
+			</div>
+				';
 ?>
 
 
 <script>
-function choisir_select(select) {
-	if(select.value == 'choix') {
-		var choix = document.createElement('input');
-		choix.type= 'text';
-		choix.onblur= function() {
-		var option = document.createElement('option');
-		option.innerHTML = choix.value;
-		option.value = choix.value;
-		choix.parentNode.replaceChild(select, choix);
-		select.insertBefore(option, select.firstChild);
-		select.selectedIndex = 0;
-		}
-		select.parentNode.replaceChild(choix, select);
-	}
-	select.focus();
-}
-
-$('.fdatepicker').fdatepicker({
-  language: 'fr',
-  format: 'dd/mm/yyyy'
-});
-
-$('.fdatepicker').fdatepicker({
-  language: 'fr',
-  format: 'hh:ii:ss'
-});
 
 function calcul_taux(table){
 	var cours_theorique=$('input[id="cours_theorique"]').val();
@@ -77,7 +56,7 @@ function calcul_taux(table){
 		case 'ventes' :$('input[name="taux_vente"]').val(taux); break;
 		
 		}
-	$('input[id="cours_pratique"]').val(taux);
+	$('input[id="cours_pratique"]').val(taux.toFixed(4));
 	}
 
 	

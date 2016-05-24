@@ -13,9 +13,15 @@ $txt_eux='
 <br />'.$cp.' '.$ville.'
 <br />SIRET';
 
-$txt_divers='TVA 20%';
+$txt_divers='TVA Autoliquidée';
+
+$txt_tva='TVA Due par l\'Acquéreur. Article 283.2 sexies du C.G.I.';
+
+$txt_divers.='<br />'.$txt_tva;
+
 
 $tva=$prix_ht*0.2;
+$tva=0;
 $prix_ttc=$prix_ht+$tva;
 
 
@@ -38,7 +44,7 @@ $txt1.='
 <tr>
 	<td style="border: solid 1px #bebebe; padding:5px">'.$donnees['categorie_params'].'</td>
 	<td style="border: solid 1px #bebebe; padding:5px">'.$donnees['poids'].' kg</td>
-	<td style="border: solid 1px #bebebe; padding:5px">'.$donnees['cours'].'</td>
+	<td style="border: solid 1px #bebebe; padding:5px">'.($donnees['taux_vente']/1000).' €/kg</td>
 	<td style="border: solid 1px #bebebe; padding:5px"><strong>'.$prix_ht.' €</strong></td>
 </tr>
 
@@ -50,10 +56,14 @@ $txt1.='
 </tr>
 
 <tr>
+	<td colspan="4"> </td>
+</tr>
+
+<tr>
 	<td style="border: solid 1px #bebebe; padding:5px"></td>
 	<td style="border: solid 1px #bebebe; padding:5px"></td>
-	<td style="border: solid 1px #bebebe; padding:5px">TVA 20%</td>
-	<td style="border: solid 1px #bebebe; padding:5px"><strong>'.number_format($tva, 2).' €</strong></td>
+	<td style="border: solid 1px #bebebe; padding:5px">TVA Autoliquidée</td>
+	<td style="border: solid 1px #bebebe; padding:5px">---</td>
 </tr>
 
 <tr>
